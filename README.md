@@ -23,12 +23,12 @@ You can explore this repository in a VS Code-like interface using [this link](ht
 
 ## 📚 API Overview
 
-| Function / Macro     | Parameters                      | Description                                                          |
-| -------------------- | ------------------------------- | -------------------------------------------------------------------- |
-| `ticktimer_init()`   | `ticktimer_t timer`             | Initialize a hardware timer to generate 1ms tick                     |
-| `timer_gettick()`    | *(void)*                        | Returns the current tick count (in milliseconds)                     |
-| `task_timer_reset()` | `task *timer`                   | Reset a software timer                                               |
-| `is_task_elapsed()`  | `task *timer, uint32_t timeout` | Returns `true` if the specified timeout has elapsed since last reset |
+| Function / Macro     | Parameters                                  | Description                                                          |
+| -------------------- | ------------------------------------------- | -------------------------------------------------------------------- |
+| `tick_timer_init()`  | `tick_timer_t timer`                        | Initialize a hardware timer to generate 1ms tick                     |
+| `timer_gettick()`    | *(void)*                                    | Returns the current tick count (in milliseconds)                     |
+| `task_timer_reset()` | `task_tick_t *task_timer`                   | Reset a software timer                                               |
+| `is_task_elapsed()`  | `task_tick_t *task_timer, uint32_t timeout` | Returns `true` if the specified timeout has elapsed since last reset |
 
 ## 🚀 Getting Started
 
@@ -53,8 +53,8 @@ In your project (before including headers), make sure to define CPU frequency:
 #include <avr/io.h>
 #include "GAGHL_AVR_TASK_HANDLER.h"
 
-task toggle_100ms = 0;
-task toggle_500ms = 1;
+task_tick_t toggle_100ms = 0;
+task_tick_t toggle_500ms = 1;
 
 int main(void) {
     DDRA = 0x01;

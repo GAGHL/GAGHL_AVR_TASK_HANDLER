@@ -9,6 +9,9 @@
 #ifndef GAGHL_AVR_TASK_HANDLER_H_
 #define GAGHL_AVR_TASK_HANDLER_H_
 
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/atomic.h>
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -19,24 +22,31 @@ typedef enum{
 	TIMER0,
 	TIMER1,
 	TIMER2,
+#ifdef OCR3A
 	TIMER3,
-	TIMER4
-} ticktimer_t;
+#endif
+#ifdef OCR4A
+	TIMER4,
+#endif
+#ifdef OCR5A
+	TIMER5
+#endif
+} tick_timer_t;
 
 extern volatile uint32_t t_1ms;
 
-typedef uint32_t task;
-
-void ticktimer_init(ticktimer_t ticktimer);
+typedef uint32_t task_tick_t;
 
 uint32_t timer_gettick(void);
 
-static inline void task_timer_reset(task *timer) {
-	*timer = timer_gettick();
+void tick_timer_init(tick_timer_t timer);
+
+static inline void task_timer_reset(task_tick_t *task_timer) {
+	*task_timer = timer_gettick();
 }
 
-static inline bool is_task_elapsed(task *timer, uint32_t timeout) {
-	return ((uint32_t)(timer_gettick() - *timer) >= timeout);
+static inline bool is_task_elapsed(task_tick_t *task_timer, uint32_t timeout) {
+	return ((uint32_t)(timer_gettick() - *task_timer) >= timeout);
 }
 
 #endif /* GAGHL_AVR_TASK_HANDLER_H_ */

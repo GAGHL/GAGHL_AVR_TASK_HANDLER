@@ -6,15 +6,13 @@
  */ 
 
 #include "GAGHL_AVR_TASK_HANDLER.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <util/atomic.h>
 
 #ifndef F_CPU
 	#define F_CPU 8000000UL
 #endif
 
 volatile uint32_t t_1ms = 0;
+static int8_t tick_timer_selected = -1;
 
 static inline void timer0_init(void) {
 	#if defined(TCCR0A)
@@ -136,32 +134,70 @@ static inline void timer4_init(void) {
 	#endif
 }
 
-void ticktimer_init(ticktimer_t ticktimer){
+static inline void timer5_init(void) {
+	#ifdef TCCR5B
+		// Timer5: CTC mode, prescaler = 64
+		TCCR5A = 0x00;
+		TCCR5B = ((1 << WGM52) | (1 << CS51) | (1 << CS50));
+			
+		#if F_CPU == 8000000UL
+			OCR5A = 124; // 1ms tick: 8MHz  / 64 / 125 = 1ms
+		#elif F_CPU == 16000000UL
+			OCR5A = 249; // 1ms tick: 16MHz / 64 / 250 = 1ms
+		#else
+			#error "Unsupported F_CPU for 1ms Tick!"
+		#endif
+			
+		TIMSK5 |= (1 << OCIE5A); // Enable Timer5 CTC Interrupt
+	#endif
+}
+
+void ticktimer_init(tick_timer_t tick_timer){
+	
+	if (tick_timer_selected != -1) {
+		return;
+	}
 	
 	cli();
 	
-	switch(ticktimer){
+	switch(tick_timer){
 		
 		case TIMER0:
 			timer0_init();
+			tick_timer_selected = tick_timer;
 		break;
 		
 		case TIMER1:
 			timer1_init();
+			tick_timer_selected = tick_timer;
 		break;
 		
 		case TIMER2:
 			timer2_init();
+			tick_timer_selected = tick_timer;
 		break;
 		
+	#ifdef OCR3A
 		case TIMER3:
 			timer3_init();
+			tick_timer_selected = tick_timer;
 		break;
-		
+	#endif
+	
+	#ifdef OCR4A
 		case TIMER4:
 			timer4_init();
+			tick_timer_selected = tick_timer;
 		break;
-		
+	#endif
+	
+	#ifdef OCR5A
+		case TIMER5:
+			timer5_init();
+			tick_timer_selected = tick_timer;
+		break;
+	#endif
+	
 	}
 	
 	sei();
@@ -203,6 +239,12 @@ void ticktimer_init(ticktimer_t ticktimer){
 	ISR(TIMER4_COMPA_vect) {
 		t_1ms++;
 	}
+#endif
+
+#if defined(TIMER5_COMPA_vect)
+ISR(TIMER5_COMPA_vect) {
+	t_1ms++;
+}
 #endif
 
 

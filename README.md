@@ -84,6 +84,7 @@ int main(void) {
 ## 🔧 Requirements
 
 - AVR microcontroller (e.g., ATmega32, ATmega16, ATmega2560)
+- Timer3/Timer4 only available on larger MCUs like ATmega2560
 - AVR-GCC or any compatible C toolchain
 
 ## 🛠️ TODO

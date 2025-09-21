@@ -26,7 +26,7 @@ You can explore this repository in a VS Code-like interface using [this link](ht
 | Function / Macro     | Parameters                      | Description                                                          |
 | -------------------- | ------------------------------- | -------------------------------------------------------------------- |
 | `ticktimer_init()`   | `ticktimer_t timer`             | Initialize a hardware timer to generate 1ms tick                     |
-| `HAL_GetTick()`      | *(void)*                        | Returns the current tick count (in milliseconds)                     |
+| `timer_gettick()`    | *(void)*                        | Returns the current tick count (in milliseconds)                     |
 | `task_timer_reset()` | `task *timer`                   | Reset a software timer                                               |
 | `is_task_elapsed()`  | `task *timer, uint32_t timeout` | Returns `true` if the specified timeout has elapsed since last reset |
 

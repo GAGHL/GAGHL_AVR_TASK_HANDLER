@@ -206,7 +206,7 @@ void ticktimer_init(ticktimer_t ticktimer){
 #endif
 
 
-uint32_t HAL_GetTick(void) {
+uint32_t timer_gettick(void) {
 	uint32_t tick;
 	
 	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { tick = t_1ms; }

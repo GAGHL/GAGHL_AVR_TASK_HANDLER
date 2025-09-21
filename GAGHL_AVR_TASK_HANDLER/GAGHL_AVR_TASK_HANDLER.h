@@ -29,14 +29,14 @@ typedef uint32_t task;
 
 void ticktimer_init(ticktimer_t ticktimer);
 
-uint32_t HAL_GetTick(void);
+uint32_t timer_gettick(void);
 
 static inline void task_timer_reset(task *timer) {
-	*timer = HAL_GetTick();
+	*timer = timer_gettick();
 }
 
 static inline bool is_task_elapsed(task *timer, uint32_t timeout) {
-	return ((uint32_t)(HAL_GetTick() - *timer) >= timeout);
+	return ((uint32_t)(timer_gettick() - *timer) >= timeout);
 }
 
 #endif /* GAGHL_AVR_TASK_HANDLER_H_ */

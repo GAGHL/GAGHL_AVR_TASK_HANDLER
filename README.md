@@ -60,6 +60,7 @@ int main(void) {
     DDRB = 0x02;
     ticktimer_init(TIMER0);  // Initialize Timer0 for 1ms ticks
     
+    task_timer_reset(&toggle_100ms);
     task_timer_reset(&toggle_500ms);
     
     while (1) {

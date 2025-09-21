@@ -8,11 +8,13 @@
 #include "GAGHL_AVR_TASK_HANDLER.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/atomic.h>
 
 #ifndef F_CPU
 	#define F_CPU 8000000UL
 #endif
 
+volatile uint32_t t_1ms = 0;
 
 static inline void timer0_init(void) {
 	#if defined(TCCR0A)
@@ -165,39 +167,49 @@ void ticktimer_init(ticktimer_t ticktimer){
 	sei();
 }
 
-ISR(TIMER0_COMP_vect) {
-	t_1ms++;
-}
+#if defined(TIMER0_COMPA_vect)
+	ISR(TIMER0_COMPA_vect) {
+		t_1ms++;
+	}
+#elif defined(TIMER0_COMP_vect)
+	ISR(TIMER0_COMP_vect) {
+		t_1ms++;
+	}
+#endif
 
-ISR(TIMER0_COMPA_vect) {
-	t_1ms++;
-}
+#if defined(TIMER1_COMPA_vect)
+	ISR(TIMER1_COMPA_vect) {
+		t_1ms++;
+	}
+#endif
 
-ISR(TIMER1_COMPA_vect) {
-	t_1ms++;
-}
+#if defined(TIMER2_COMPA_vect)
+	ISR(TIMER2_COMPA_vect) {
+		t_1ms++;
+	}
+#elif defined(TIMER2_COMP_vect)
+	ISR(TIMER2_COMP_vect) {
+		t_1ms++;
+	}
+#endif
 
-ISR(TIMER2_COMP_vect) {
-	t_1ms++;
-}
+#if defined(TIMER3_COMPA_vect)
+	ISR(TIMER3_COMPA_vect) {
+		t_1ms++;
+	}
+#endif
 
-ISR(TIMER2_COMPA_vect) {
-	t_1ms++;
-}
-
-ISR(TIMER3_COMPA_vect) {
-	t_1ms++;
-}
-
-ISR(TIMER4_COMPA_vect) {
-	t_1ms++;
-}
+#if defined(TIMER4_COMPA_vect)
+	ISR(TIMER4_COMPA_vect) {
+		t_1ms++;
+	}
+#endif
 
 
 uint32_t HAL_GetTick(void) {
 	uint32_t tick;
 	
-	tick = t_1ms;
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { tick = t_1ms; }
 	
 	return tick;
 }

@@ -23,7 +23,7 @@ typedef enum{
 	TIMER4
 } ticktimer_t;
 
-volatile uint32_t t_1ms;
+extern volatile uint32_t t_1ms;
 
 typedef uint32_t task;
 

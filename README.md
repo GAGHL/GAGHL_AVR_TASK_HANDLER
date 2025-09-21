@@ -50,6 +50,7 @@ In your project (before including headers), make sure to define CPU frequency:
 ```c
 #define F_CPU 8000000UL
 
+#include <avr/io.h>
 #include "GAGHL_AVR_TASK_HANDLER.h"
 
 task toggle_100ms = 0;

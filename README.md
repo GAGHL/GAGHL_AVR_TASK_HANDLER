@@ -53,12 +53,13 @@ In your project (before including headers), make sure to define CPU frequency:
 #include <avr/io.h>
 #include "GAGHL_AVR_TASK_HANDLER.h"
 
-task_tick_t toggle_100ms = 0;
-task_tick_t toggle_500ms = 1;
-
 int main(void) {
     DDRA = 0x01;
     DDRB = 0x02;
+
+    task_tick_t toggle_100ms = 0;
+    task_tick_t toggle_500ms = 1;
+
     ticktimer_init(TIMER0);  // Initialize Timer0 for 1ms ticks
     
     task_timer_reset(&toggle_100ms);

@@ -59,7 +59,6 @@ int main(void) {
 
     task_tick_t toggle_100ms = 0;
     task_tick_t toggle_500ms = 1;
-
     ticktimer_init(TIMER0);  // Initialize Timer0 for 1ms ticks
     
     task_timer_reset(&toggle_100ms);

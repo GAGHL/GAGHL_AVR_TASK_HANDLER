@@ -68,14 +68,14 @@ int main(void) {
     while (1) {
         // Toggle PA0 every 100ms
         if (is_task_elapsed(&toggle_100ms, 100)) {
-            PORTA ^= 0x01;
             task_timer_reset(&toggle_100ms);
+            PORTA ^= 0x01;
         }
         
         // Toggle PB1 every 500ms
         if (is_task_elapsed(&toggle_500ms, 500)) {
-            PORTB ^= 0x02;
             task_timer_reset(&toggle_500ms);
+            PORTB ^= 0x02;
         }
     }
 }

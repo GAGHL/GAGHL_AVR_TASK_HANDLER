@@ -152,7 +152,7 @@ static inline void timer5_init(void) {
 	#endif
 }
 
-void ticktimer_init(tick_timer_t tick_timer){
+void tick_timer_init(tick_timer_t tick_timer){
 	
 	if (tick_timer_selected != -1) {
 		return;
@@ -251,7 +251,9 @@ ISR(TIMER5_COMPA_vect) {
 uint32_t timer_gettick(void) {
 	uint32_t tick;
 	
-	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { tick = t_1ms; }
+	cli();
+	tick = t_1ms;
+	sei();
 	
 	return tick;
 }
